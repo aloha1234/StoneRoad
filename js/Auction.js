@@ -41,7 +41,7 @@ export default class Auctions extends Component {
     const { auction, points, onBid } = state.params
     const { is_leader, reward_name, title, location, reward_description, image_url, current_bid, minimum_bid, auction_end_date, auction_start_date, id } = auction
     
-    const bidRequired = current_bid ? current_bid + 5 : minimum_bid + (this.state.bid ? 5 : 0)
+    const bidRequired = current_bid ? current_bid + 5 : minimum_bid
     const canBid = points >= bidRequired;
     const endDate = new moment(auction_end_date)
 
@@ -82,7 +82,7 @@ export default class Auctions extends Component {
         <View>
           <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 36, fontWeight: '500', color: '#555'}}>{reward_name}</Text>
           <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>{reward_description}</Text>
-          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: buttonColor}}>CURRENT BID: {current_bid} POINTS</Text>
+          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: buttonColor}}>CURRENT BID: {current_bid + (this.state.bid ? 5 : 0)} POINTS</Text>
           <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: '#555'}}>{endDate.to().substring(endDate.to().length-4, endDate.to()).toUpperCase() + ' REMAINING'}</Text>
         </View>
         <TouchableHighlight 

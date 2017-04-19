@@ -4,7 +4,8 @@ import {
   Text,
   View,
   FlatList,
-  TouchableHighlight
+  TouchableHighlight,
+  Linking
 } from 'react-native';
 
 
@@ -40,6 +41,9 @@ export default class Settings extends Component {
             )
           }}
         />
+        <TouchableHighlight underlayColor='transparent' onPress={() => Linking.openURL('mailto:somethingemail@gmail.com?subject=abcdefg&body=body')}>
+        <Text style={{fontFamily: 'American Typewriter', fontSize: 14, color: '#555', textAlign: 'center', padding: 16}}>support@stoneroad.org</Text>
+        </TouchableHighlight>
       </View>
     );
   }
