@@ -82,7 +82,7 @@ export default class Home extends Component {
     if (loading) {
       return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{fontFamily: "American Typewriter", fontSize: 24, color: '#555'}}>Loading</Text>
+          <Text style={{fontFamily: "American Typewriter", fontSize: 24, color: '#555', textAlign: 'center'}}>Loading</Text>
         </View>
       )
     }

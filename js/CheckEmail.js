@@ -61,13 +61,13 @@ export default class CheckEmail extends Component {
                     return
 
                   userExists(email, (err, res) => {
-                    this.setState({requestPending: false})
                     //exists
                     if (!!res) {
                       navigate('Login', { email: email })
                     } else {
                       navigate('Register', { email: email })
                     }
+                    this.setState({requestPending: false})
                   })
                 }}
               />
