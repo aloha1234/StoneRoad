@@ -19,9 +19,7 @@ import { userExists } from './API'
 export default class CheckEmail extends Component {
 
   static navigationOptions = {
-    header: {
-      visible: false
-    },
+    headerVisible: false,
     cardStack: { gesturesEnabled: false }
   }
 

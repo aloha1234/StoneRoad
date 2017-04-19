@@ -18,9 +18,7 @@ import { userExists } from './API'
 export default class CheckEmail extends Component {
 
   static navigationOptions = {
-    header: {
-      visible: false
-    },
+    headerVisible: false,
     cardStack: { gesturesEnabled: false }
   }
 
@@ -43,9 +41,9 @@ export default class CheckEmail extends Component {
       {
         <KeyboardAvoidingView
               behavior='position'
-              style={{marginTop: Screen.width, marginHorizontal: 16, borderBottomColor: '#111', borderBottomWidth: 1, alignSelf: 'stretch' }}>
+              style={{marginTop: Screen.width, marginHorizontal: 16, borderBottomColor: '#111', borderBottomWidth: StyleSheet.hairlineWidth, alignSelf: 'stretch' }}>
               <TextInput
-                style={{height: 55, fontSize: 24, fontWeight: '600', textAlign: 'center'}}
+                style={{fontFamily: 'American Typewriter', height: 55, fontSize: 24, fontWeight: '600', textAlign: 'center'}}
                 keyboardType='email-address'
                 autoCapitalize='none'
                 autoCorrect={false}

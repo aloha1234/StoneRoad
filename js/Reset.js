@@ -14,9 +14,7 @@ import { authenticate } from './API'
 export default class Login extends Component {
 
   static navigationOptions = {
-    header: {
-      visible: false
-    },
+    headerVisible: false,
     cardStack: { gesturesEnabled: false }
   }
 

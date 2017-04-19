@@ -25,9 +25,7 @@ const Screen = Dimensions.get('window')
 export default class Home extends Component {
 
   static navigationOptions = {
-    header: {
-      visible: false
-    },
+    headerVisible: false,
     cardStack: { gesturesEnabled: false }
   }
 

@@ -47,7 +47,7 @@ export default class Auctions extends Component {
                 <View>
                   <View style={{paddingVertical: 16, flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: '#AAA'}}>
                     <Image
-                      style={{width: 96, height: 96, borderRadius: 4}}
+                      style={{backgroundColor: '#333', width: 96, height: 96, borderRadius: 4}}
                       source={{uri: image_url}}
                     />
                     <View style={{flex: 1, marginLeft: 16}}>

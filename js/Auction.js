@@ -66,7 +66,7 @@ export default class Auctions extends Component {
             </TouchableHighlight>
           </View>
           <Image
-            style={{ width: screen.width-32, height: screen.width-32, borderRadius: 4}}
+            style={{ backgroundColor: '#333', width: screen.width-32, height: screen.width-32, borderRadius: 4}}
             source={{uri: image_url}}
           />
         </View>
