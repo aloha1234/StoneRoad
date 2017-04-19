@@ -10,6 +10,7 @@ import Login from './js/Login'
 import Register from './js/Register'
 import Birthday from './js/Birthday'
 import Disclaimer from './js/Disclaimer'
+import Information from './js/Information'
 import { loggedIn } from './js/API'
 
 import { StackNavigator } from 'react-navigation';
@@ -20,10 +21,12 @@ const LoginFlow = StackNavigator({
   Register: { screen: Register },
   Auctions: { screen: Home },
   Auction: { screen: Auction },
-  Disclaimer: { screen: Disclaimer }
+  Disclaimer: { screen: Disclaimer },
+  Information: { screen: Information }
 }, {
   headerMode: 'none',
-  cardStack: { gesturesEnabled: false }
+  mode: '',
+  gesturesEnabled: false
 });
 
 if (loggedIn()) {

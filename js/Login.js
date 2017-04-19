@@ -7,10 +7,12 @@ import {
   Image,
   KeyboardAvoidingView,
   TouchableHighlight,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
 
 const Screen = Dimensions.get('window')
+import Icon from 'react-native-vector-icons/Ionicons'
 
 
 import { authenticate } from './API'
@@ -19,7 +21,10 @@ export default class CheckEmail extends Component {
 
   static navigationOptions = {
     headerVisible: false,
-    cardStack: { gesturesEnabled: false }
+    cardStack: {
+      gesturesEnabled: false
+    },
+    gesturesEnabled: false
   }
 
   constructor(props) {
@@ -28,13 +33,20 @@ export default class CheckEmail extends Component {
   }
 
   render() {
-    const { navigate, state } = this.props.navigation
+    const { navigate, state, goBack } = this.props.navigation
     const { email } = state.params
     return (
-      <View style={{flex: 1, backgroundColor: '#f0ede6', alignItems: 'center', justifyContent: 'space-between', overflow: 'visible'}}>
+      <View pointerEvents='box-none' style={{flex: 1, backgroundColor: '#f0ede6', alignItems: 'center', justifyContent: 'space-between', overflow: 'visible'}}>
+        <TouchableHighlight
+          style={{alignSelf: 'flex-start', height: 44, width: 44, margin: 12, marginTop: 32}}
+          underlayColor={'transparent'}
+          overlayColor='transparent'
+          onPress={() => { goBack() }}>
+            <Icon size={24} style={{color: '#333', fontWeight: '800'}} name="ios-arrow-back" />
+        </TouchableHighlight>
         <View style={{height: 0, marginTop: 20}}>
           <Image
-            style={{ height: Screen.width, width: Screen.width}}
+            style={{marginTop: -32, height: Screen.width, width: Screen.width}}
             source={require('../img/logo.png')}
             resizeMode='contain'
           />
@@ -53,11 +65,17 @@ export default class CheckEmail extends Component {
             returnKeyType='next'
             onSubmitEditing={(event) => {
               const password = event.nativeEvent.text
+              if (!password || password.length == 0)
+                return
+              else
               authenticate(email, password, (errs, res) => {
                 if (errs && errs.length > 0) {
                   for (const e in errs) {
                     Alert.alert('Error', errs[e], )
-                  } 
+                  }
+                }
+                else if (errs) {
+                  Alert.alert('Login Failed', "Could not connect")  
                 } else {
                   navigate('Auctions')
                 }
@@ -68,7 +86,25 @@ export default class CheckEmail extends Component {
           }
         <View style={{marginBottom: 16, alignSelf: 'stretch', marginHorizontal: 16}}>
         
-          <TouchableHighlight overlayColor="transparent" underlayColor="transparent" onPress={() => { if (this.state.text) navigate('Register', { email: this.state.text }) }}>
+          <TouchableHighlight 
+            overlayColor="transparent"
+            underlayColor="transparent" 
+            onPress={() => {
+              const { password } = this.state
+              if (!password || password.length == 0)
+                return
+              else
+              authenticate(email, password, (errs, res) => {
+                if (errs && typeof errs != "string" && errs.length > 0) {
+                  Alert.alert('Error', errs[0], )
+                }
+                else if (errs) {
+                  Alert.alert('Login Failed', "Could not connect")  
+                } else {
+                  navigate('Auctions')
+                }
+              })
+            }}>
             <View style={{paddingVertical: 24, paddingHorizontal: 16, marginTop: StyleSheet.hairlineWidth*-1, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
               <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEXT  ></Text>
             </View>

@@ -9,6 +9,10 @@ function loadKey() {
 
 loadKey()
 
+function locations(cb) {
+	call('locations/', 'GET', null, cb)
+}
+
 function bid(item, bid, cb) {
 	call('bidding_rewards/'+item+'/bid/', 'POST', JSON.stringify({ bid: bid }), cb)
 }
@@ -86,4 +90,4 @@ function call(endpoint, method, body, cb) {
 	})
 }
 
-export { user, redeem, userExists, authenticate, loggedIn, register, auctions, bid }
+export { user, redeem, userExists, authenticate, loggedIn, register, auctions, bid, locations }

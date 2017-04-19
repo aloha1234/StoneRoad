@@ -7,7 +7,8 @@ import {
   Image,
   KeyboardAvoidingView,
   TouchableHighlight,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
 
 const Screen = Dimensions.get('window')
@@ -19,7 +20,7 @@ export default class CheckEmail extends Component {
 
   static navigationOptions = {
     headerVisible: false,
-    cardStack: { gesturesEnabled: false }
+    cardStack: { gesturesEnabled: false, requestPending: false }
   }
 
   constructor(props) {
@@ -38,7 +39,7 @@ export default class CheckEmail extends Component {
             resizeMode='contain'
           />
         </View>
-      {
+      
         <KeyboardAvoidingView
               behavior='position'
               style={{marginTop: Screen.width, marginHorizontal: 16, borderBottomColor: '#111', borderBottomWidth: StyleSheet.hairlineWidth, alignSelf: 'stretch' }}>
@@ -53,32 +54,70 @@ export default class CheckEmail extends Component {
                 value={this.state.text}
                 returnKeyType='done'
                 enablesReturnKeyAutomatically={true}
-                // onSubmitEditing={(event) => {
-                //   const email = event.nativeEvent.text
-                //   userExists(email, (err, res) => {
-                //     //exists
-                //     if (!!res) {
-                //       navigate('Login', { email: email })
-                //     } else {
-                //       navigate('Register', { email: email })
-                //     }
-                //   })
-                // }}
+                onSubmitEditing={(event) => {
+                  this.setState({requestPending: true})
+                  const email = event.nativeEvent.text
+                  if (!email || email.length < 1)
+                    return
+
+                  userExists(email, (err, res) => {
+                    this.setState({requestPending: false})
+                    //exists
+                    if (!!res) {
+                      navigate('Login', { email: email })
+                    } else {
+                      navigate('Register', { email: email })
+                    }
+                  })
+                }}
               />
             </KeyboardAvoidingView>
-          }
-        <View style={{marginBottom: 16, alignSelf: 'stretch', marginHorizontal: 16}}>
-          <TouchableHighlight onPress={() => { if (this.state.text) navigate('Login', { email: this.state.text }) }}>
+          
+        <View style={{marginBottom: 16, marginTop: 16, alignSelf: 'stretch', marginHorizontal: 16}}>
+          <TouchableHighlight
+            overlayColor='transparent'
+            underlayColor='transparent'
+            onPress={() => {
+              if (this.state.requestPending)
+                return
+
+              const email = this.state.text
+              if (!email || email.length < 1)
+                return
+
+              this.setState({requestPending: true})
+              userExists(email, (err, res) => {
+                this.setState({requestPending: false})
+                //exists
+                if (!!res) {
+                  navigate('Login', { email: email })
+                } else {
+                  navigate('Register', { email: email })
+                }
+              })
+            }}>
             <View style={{paddingVertical: 24, paddingHorizontal: 16, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
-              <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>LOG  IN  ></Text>
+              <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#ff890d'}}>NEXT  ></Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={() => { if (this.state.text) navigate('Register', { email: this.state.text }) }}>
-            <View style={{paddingVertical: 24, paddingHorizontal: 16, marginTop: StyleSheet.hairlineWidth*-1, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
-              <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEW  ACCOUNT  ></Text>
-            </View>
-          </TouchableHighlight>
-        </View>
+          </View>
+         {//<TouchableHighlight
+                //   overlayColor='transparent'
+                //   underlayColor='transparent'
+                //   onPress={() => { if (this.state.text) navigate('Login', { email: this.state.text }) }}>
+                //   <View style={{paddingVertical: 24, paddingHorizontal: 16, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
+                //     <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>LOG  IN  ></Text>
+                //   </View>
+                // </TouchableHighlight>
+                // <TouchableHighlight
+                //   overlayColor='transparent'
+                //   underlayColor='transparent'
+                //   onPress={() => { if (this.state.text) navigate('Register', { email: this.state.text }) }}>
+                //   <View style={{paddingVertical: 24, paddingHorizontal: 16, marginTop: StyleSheet.hairlineWidth*-1, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
+                //     <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEW  ACCOUNT  ></Text>
+                //   </View>
+                // </TouchableHighlight>
+              }
       </View>
     )
   }

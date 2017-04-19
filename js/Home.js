@@ -8,7 +8,8 @@ import {
   Button,
   Dimensions,
   Modal,
-  StatusBar
+  StatusBar,
+  Alert
 } from 'react-native';
 
 import Auctions from './Auctions'
@@ -16,9 +17,12 @@ import Profile from './Profile'
 import Settings from './Settings'
 import QR from './QR'
 
+import Icon from 'react-native-vector-icons/Ionicons'
+
+
 import DrawerLayout from 'react-native-drawer-layout'
 
-import { user, auctions } from './API'
+import { user, auctions, locations } from './API'
 
 const Screen = Dimensions.get('window')
 
@@ -26,55 +30,93 @@ export default class Home extends Component {
 
   static navigationOptions = {
     headerVisible: false,
-    cardStack: { gesturesEnabled: false }
+    cardStack: {
+      gesturesEnabled: false
+    }
   }
 
   constructor(props) {
     super(props)
-    this.state = { points: 0, modalVisible: false, loading: true }
+    this.state = { points: 0, modalVisible: false, loading: true, location: 'All' }
     this.updateUser()
     this.updateAuctions()
+    this.updateLocations()
   }
 
   updateUser() {
     user((err, user) => {
-      this.setState({ points : user.available_points, packs: user.packs, loading: false })
+      if (err) {
+        // Alert.alert('Error', err)
+      } else {
+        this.setState({ points : user.available_points, packs: user.packs, loading: false, location: 'All'})
+      }
     })
   }
 
-
+  updateLocations() {
+    locations((err, locations) => {
+      if (!err && locations.results) {
+        // alert(JSON.stringify(locations.results))
+        this.setState({ locations: locations.results })
+      }
+    })
+  }
 
   updateAuctions() {
     auctions((err, res) => {
-      this.setState({auctions: res.results})
+      if (!err) {
+        this.setState({auctions: res.results})
+      }
     })
   }
 
   render() {
     const { navigate, state } = this.props.navigation
-    const { auctions, points, packs, loading } = this.state
+    const { auctions, points, packs, loading, locations, location } = this.state
     if (loading) {
       return (
-        <View>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{fontFamily: "American Typewriter", fontSize: 24, color: '#555'}}>Loading</Text>
         </View>
       )
     }
+
     return (
            
          
       <View style={{flex: 1}}>
+       <DrawerLayout
+        ref={(rightDrawer) => { return this.rightDrawer = rightDrawer  }}
+        drawerWidth={Screen.width-48}
+        drawerPosition={DrawerLayout.positions.Right}
+        renderNavigationView={() => <Settings
+          onSelect={(location) => {
+            this.setState({location: location})
+          }}
+          locations={locations}
+          location={location} />}>
           
-        <View style={{backgroundColor: '#f0ede6', paddingTop: 20, borderBottomWidth: 1, borderColor: '#CCC', alignItems: 'center'}}>
+        <View style={{backgroundColor: '#f0ede6', paddingTop: 20, borderBottomWidth: 1, borderColor: '#CCC', alignItems: 'stretch'}}>
           <View style={{height: 64, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+            <TouchableHighlight>
+              <Icon style={{height: 32, width: 32, fontSize: 32, marginLeft: 12, color: 'transparent'}} name="ios-settings"></Icon>
+            </TouchableHighlight>
             <Image
               style={{ width: 128}}
               source={require('../img/logo-small.png')}
               resizeMode='contain'
             />
+            <TouchableHighlight overlayColor="transparent" underlayColor="transparent" onPress={() => this.rightDrawer.openDrawer()}>
+              <Icon style={{height: 32, width: 32, fontSize: 32, textAlign: 'right', marginRight: 12, color: '#333'}} name="ios-settings"></Icon>
+            </TouchableHighlight>
           </View>
         </View>
 
-        <Auctions auctions={auctions} points={points} onBid={() => { self.updateAuctions; self.updateUser }} selectAuction={(id) => navigate('Auction', { auction: auctions[id], points: points}) } />
+        <Auctions
+          auctions={auctions}
+          points={points}
+          location={location}
+          selectAuction={(id) => navigate('Auction', { auction: auctions[id], points: points, onBid: () => { this.updateAuctions(); this.updateUser(); }}) } />
 
         <TouchableHighlight 
           underlayColor='transparent'
@@ -101,6 +143,7 @@ export default class Home extends Component {
                 close= {() => {
                   StatusBar.setBarStyle('dark-content')
                   this.updateUser()
+                  this.updateAuctions()
                   this.setState({ modalVisible: !this.state.modalVisible })
                 }}
               >
@@ -109,7 +152,8 @@ export default class Home extends Component {
                   style={{zIndex: 999}}
                   onPress={() => {
                     StatusBar.setBarStyle('dark-content')
-                    this.updateUser()
+                  this.updateUser()
+                  this.updateAuctions()
                     this.setState({ modalVisible: !this.state.modalVisible })
                   }}>
                   <Text style={{color: '#FFF', fontSize: 36}}>×</Text>
@@ -119,8 +163,8 @@ export default class Home extends Component {
             </View>
            </View>
         </Modal>
+        </DrawerLayout>
         </View>
-
     );
   }
 }

@@ -102,7 +102,7 @@ export default class CheckEmail extends Component {
           }
         <View style={{marginBottom: 16, alignSelf: 'stretch', marginHorizontal: 16}}>
         
-          <TouchableHighlight onPress={() => { 
+          <TouchableHighlight underlayColor='transparent' overlayColor='transparent' onPress={() => { 
               const { password1, password2 } = this.state
               if (!this.state.sentPressed && password1 == password2) {
 
@@ -124,7 +124,7 @@ export default class CheckEmail extends Component {
               }
             }}>
             <View style={{paddingVertical: 24, paddingHorizontal: 16, marginTop: StyleSheet.hairlineWidth*-1, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
-              <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEXT  ></Text>
+              <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#ff890d'}}>REGISTER  ></Text>
             </View>
           </TouchableHighlight>
         </View>
