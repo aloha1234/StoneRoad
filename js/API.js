@@ -9,9 +9,16 @@ function loadKey() {
 
 loadKey()
 
+function bid(item, bid, cb) {
+	call('bidding_rewards/'+item+'/bid/', 'POST', JSON.stringify({ bid: bid }), cb)
+}
 
-function user(onComplete) {
-	call('user', 'GET', null, onComplete)
+function auctions(cb) {
+	call('bidding_rewards/', 'GET', null, cb)
+}
+
+function user(cb) {
+	call('user', 'GET', null, cb)
 }
 
 function redeem(code, cb) {
@@ -35,6 +42,7 @@ function authenticate(email, password, cb) {
 	call('authenticate', 'POST', JSON.stringify({ email: email, password: password }), (err, res) => {
 		if (!err) {
 			key = res.key
+			console.log('???!', key)
 		}
 		cb(err, res)
 	})
@@ -58,6 +66,8 @@ function call(endpoint, method, body, cb) {
     'Content-Type': 'application/json',
   }
 
+  console.log(endpoint, method, body, headers)
+
 	fetch(`${API_ROOT}/${endpoint}`, {
 		method,
 		headers,
@@ -76,4 +86,4 @@ function call(endpoint, method, body, cb) {
 	})
 }
 
-export { user, redeem, userExists, authenticate, loggedIn, register }
+export { user, redeem, userExists, authenticate, loggedIn, register, auctions, bid }

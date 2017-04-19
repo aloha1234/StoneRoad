@@ -11,7 +11,11 @@ import {
   StatusBar
 } from 'react-native';
 
+const moment = require('moment');
+
 import QR from './QR'
+
+import { auctions } from './API'
 
 export default class Auctions extends Component {
 
@@ -21,65 +25,40 @@ export default class Auctions extends Component {
   }
 
   render() {
-    const { points } = this.props
+    const { auctions, points, selectAuction } = this.props
     return (
       <View style={styles.container}>
-        <View style={{marginLeft: 16, paddingVertical: 16, borderBottomWidth: 1, borderColor: '#CCC'}}>
-        <Text style={{fontSize: 24}}>{`Your points: ${points >= 0 ? points : ''}`}</Text>
+        <View style={{marginHorizontal: 16, paddingVertical: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: '#AAA'}}>
+        <Text style={{fontSize: 20, textAlign: 'center', fontFamily: 'American Typewriter'}}>{points >= 0 ? `YOU HAVE ${points} POINTS.` : 'LOADING'}</Text>
         </View>
         <FlatList 
-          data={[{
-            key: 'a',
-            name: 'Ziggy Marley',
-            title: 'Ziggy Marley @ The Greek',
-            subtitle: '2 Backstage Passes',
-            description: 'Grab a friend and head backstage with Ziggy Marley at the Greek!',
-            image: 'https://s3.amazonaws.com/creativeallies/snapshots/000/131/506/original/open-uri20150516-3388-172n2lb.jpg?1431776097',
-            bid: 1200
-          }, {
-            key: 'b',
-            name: 'Surf School',
-            title: '370 pts: Surf Lessons',
-            subtitle: 'Pack of 3 - 1 hour surfing lessons',
-            description: 'Learn to surf in Marina Del Rey from former Navy Seals',
-            image: 'https://i.imgur.com/gV0pLH8.jpg',
-            bid: 2900
-          }, {
-            key: 'c',
-            name: 'Golden Gate Racetrack',
-            title: '430 Racetrack Owners Booth',
-            subtitle: 'Pack of 3 - 1 hour surfing lessons',
-            description: 'Learn to surf in Marina Del Rey from former Navy Seals',
-            image: 'https://i.imgur.com/2NgAw65.jpg',
-            bid: 5300
-          }]}
-
-          renderItem={({item}) => {
-            const { name, title, subtitle, description, image, bid } = item
-            const buttonColor = points >= bid ? '#4a90e2' : '#CCC'
-            const buttonFunction = points >= bid ? () => {} : () => {}
+          data={auctions}
+          keyExtractor={(item) => String(item.id) }
+          renderItem={({item, index}) => {
+            const { reward_name, title, location, reward_description, image_url, current_bid, minimum_bid, auction_end_date, auction_start_date, id, is_leader } = item
+            
+            const bid = (current_bid || minimum_bid) + 10;
+            const buttonColor = is_leader ? '#4CD964' : points >= bid ? '#4CD964' : '#CCC'
+            
+            const endDate = new moment(auction_end_date)
 
             return (
-             <View style={{backgroundColor: '#FFF'}}>
-              <View style={{padding: 16}}>
-                <Text style={{fontSize: 24, fontWeight: '500', color: '#555'}}>{name}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 16, marginBottom: 8}}>
-                  <View style={{flex: 1}}>
-                    <Text style={{fontSize: 16, fontWeight: '500', color: '#111'}}>{title}</Text>
-                    <Text style={{fontSize: 16, fontWeight: '500', color: '#111'}}>{subtitle}</Text>
-                    <Text style={{fontSize: 16, fontWeight: '500', color: '#999'}}>{description}</Text>
+              <TouchableHighlight overlayColor="transparent" underlayColor="transparent" onPress={() => this.props.selectAuction(index)}>
+                <View>
+                  <View style={{paddingVertical: 16, flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: '#AAA'}}>
+                    <Image
+                      style={{width: 96, height: 96, borderRadius: 4}}
+                      source={{uri: image_url}}
+                    />
+                    <View style={{flex: 1, marginLeft: 16}}>
+                      <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 24, fontWeight: '500', color: '#555'}}>{reward_name}</Text>
+                      <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: '#111'}}>{reward_description}</Text>
+                      <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: buttonColor}}>{is_leader ? 'LEADING' : (current_bid || minimum_bid)+ ' points'}</Text>
+                      <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: '#555'}}>{endDate.to().substring(endDate.to().length-4, endDate.to()).toUpperCase() + ' REMAINING'}</Text>
+                    </View>
                   </View>
-                  <Image
-                    style={{width: 80, height: 80, borderRadius: 4}}
-                    source={{uri: image}}
-                  />
-                </View>
-              </View>
-              <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8, paddingVertical: 4, backgroundColor: buttonColor, borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#AAA'}}>
-                <Text style={{color: '#FFF', fontSize: 20, fontWeight: '500'}}>{`Bid at: ${bid}`}pts</Text>
-                <Text style={{color: '#FFF', fontSize: 20, fontWeight: '500'}}>4d15hr left</Text>
-              </View>
-             </View>
+               </View>
+             </TouchableHighlight>
             )
           }}
         />
@@ -92,6 +71,6 @@ export default class Auctions extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: '#f0ede6'
   }
 });

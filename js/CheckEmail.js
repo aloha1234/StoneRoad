@@ -4,9 +4,14 @@ import {
   Text,
   TextInput,
   View,
+  Image,
   KeyboardAvoidingView,
-  TouchableHighlight
+  TouchableHighlight,
+  Dimensions
 } from 'react-native';
+
+const Screen = Dimensions.get('window')
+
 
 import { userExists } from './API'
 
@@ -27,43 +32,55 @@ export default class CheckEmail extends Component {
   render() {
     const { navigate } = this.props.navigation
     return (
-      <View style={{flex: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'space-between'}}>
-        <View style={{alignItems: 'center'}}>
-          <Text style={{fontSize: 36, marginTop: 128}}>Stone Road</Text>
-          <Text style={{fontSize: 16}}>Organic Pre Rolls</Text>
-        </View>
-        <KeyboardAvoidingView
-          behavior='position'
-          style={{marginHorizontal: 16, borderBottomColor: '#111', borderBottomWidth: 1, alignSelf: 'stretch' }}>
-          <TextInput
-            style={{height: 55, fontSize: 24, fontWeight: '600', textAlign: 'center'}}
-            keyboardType='email-address'
-            autoCapitalize='none'
-            autoCorrect={false}
-            onChangeText={(text) => this.setState({text})}
-            placeholder='Enter your email address'
-            placeholderTextColor='#AAA'
-            value={this.state.text}
-            returnKeyType='next'
-            enablesReturnKeyAutomatically={true}
-            onSubmitEditing={(event) => {
-              const email = event.nativeEvent.text
-              userExists(email, (err, res) => {
-                //exists
-                if (!!res) {
-                  navigate('Login', { email: email })
-                } else {
-                  navigate('Register', { email: email })
-                }
-              })
-            }}
+      <View style={{flex: 1, backgroundColor: '#f0ede6', alignItems: 'center', justifyContent: 'space-between', overflow: 'visible'}}>
+        <View style={{height: 0, marginTop: 20}}>
+          <Image
+            style={{ height: Screen.width, width: Screen.width}}
+            source={require('../img/logo.png')}
+            resizeMode='contain'
           />
-        </KeyboardAvoidingView>
-        <TouchableHighlight>
-        <View style={{paddingVertical: 10, paddingHorizontal: 45, marginBottom: 64, backgroundColor: '#111', borderRadius: 2}}>
-          <Text style={{fontSize: 24, fontWeight: '600', color: '#fff'}}>Next</Text>
         </View>
-        </TouchableHighlight>
+      {
+        <KeyboardAvoidingView
+              behavior='position'
+              style={{marginTop: Screen.width, marginHorizontal: 16, borderBottomColor: '#111', borderBottomWidth: 1, alignSelf: 'stretch' }}>
+              <TextInput
+                style={{height: 55, fontSize: 24, fontWeight: '600', textAlign: 'center'}}
+                keyboardType='email-address'
+                autoCapitalize='none'
+                autoCorrect={false}
+                onChangeText={(text) => this.setState({text})}
+                placeholder='Enter your email address'
+                placeholderTextColor='#AAA'
+                value={this.state.text}
+                returnKeyType='done'
+                enablesReturnKeyAutomatically={true}
+                // onSubmitEditing={(event) => {
+                //   const email = event.nativeEvent.text
+                //   userExists(email, (err, res) => {
+                //     //exists
+                //     if (!!res) {
+                //       navigate('Login', { email: email })
+                //     } else {
+                //       navigate('Register', { email: email })
+                //     }
+                //   })
+                // }}
+              />
+            </KeyboardAvoidingView>
+          }
+        <View style={{marginBottom: 16, alignSelf: 'stretch', marginHorizontal: 16}}>
+          <TouchableHighlight onPress={() => { if (this.state.text) navigate('Login', { email: this.state.text }) }}>
+            <View style={{paddingVertical: 24, paddingHorizontal: 16, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
+              <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>LOG  IN  ></Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight onPress={() => { if (this.state.text) navigate('Register', { email: this.state.text }) }}>
+            <View style={{paddingVertical: 24, paddingHorizontal: 16, marginTop: StyleSheet.hairlineWidth*-1, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
+              <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEW  ACCOUNT  ></Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       </View>
     )
   }
