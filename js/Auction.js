@@ -31,30 +31,33 @@ export default class Auctions extends Component {
     cardStack: { gesturesEnabled: true }
   }
 
-  render() {
+  constructor(props) {
+    super(props)
+    this.state = {bid: false}
+  }
 
+  render() {
     const { navigate, state, goBack } = this.props.navigation
     const { auction, points, onBid } = state.params
     const { is_leader, reward_name, title, location, reward_description, image_url, current_bid, minimum_bid, auction_end_date, auction_start_date, id } = auction
     
-    const bidRequired = (current_bid || minimum_bid) + 10
-
-
+    const bidRequired = current_bid ? current_bid + 5 : minimum_bid + (this.state.bid ? 5 : 0)
     const canBid = points >= bidRequired;
-    const pointsNeeded = current_bid ? current_bid + 10 : minimum_bid
     const endDate = new moment(auction_end_date)
 
-    const buttonColor = is_leader
+    const buttonColor = is_leader || this.state.bid
     ? '#4CD964'
     : canBid
-    ? '#007aff'
+    ? '#047cc4'
     : '#ff3b30'
 
-    const buttonText = is_leader
+    const buttonText =
+
+    is_leader || this.state.bid
     ? 'LEADING'
     : canBid
-    ? 'PLACE A BID'
-    : `NEED ${Math.max(0, pointsNeeded)} POINTS`
+    ? `BID ${Math.max(0, bidRequired)} POINTS` 
+    : `NEED ${Math.max(0, bidRequired)} POINTS`
 
 
 
@@ -77,21 +80,25 @@ export default class Auctions extends Component {
         </View>
         
         <View>
-        <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 36, fontWeight: '500', color: '#555'}}>{reward_name}</Text>
-        <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>{reward_description}</Text>
-        <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: buttonColor}}>CURRENT BID: {current_bid} POINTS</Text>
-        <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: '#555'}}>{endDate.to().substring(endDate.to().length-4, endDate.to()).toUpperCase() + ' REMAINING'}</Text>
+          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 36, fontWeight: '500', color: '#555'}}>{reward_name}</Text>
+          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>{reward_description}</Text>
+          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: buttonColor}}>CURRENT BID: {current_bid} POINTS</Text>
+          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: '#555'}}>{endDate.to().substring(endDate.to().length-4, endDate.to()).toUpperCase() + ' REMAINING'}</Text>
         </View>
         <TouchableHighlight 
-          onPress={() => {
-            alert('??')
-            if (canBid) {
+          overlayColor='rgba(0,0,0,0.25)'
+          overlayColor='rgba(0,0,0,0.25)'
+          onPress={(canBid && !is_leader) ? () => {
+            if (canBid && !is_leader) {
               bid(id, bidRequired, (err, res) => {
+                if (err)
+                  Alert.alert('Error', err)
                 onBid()
-                console.log(err, res) 
+                this.setState({bid: true})
+                // console.log(err, res) 
              })
             }
-          }}>
+          } : null}>
           <View style={{backgroundColor: buttonColor}}>
             <Text style={{padding: 16, textAlign: 'center',  fontFamily: 'American Typewriter', fontSize: 24}}>{buttonText}</Text>
           </View>

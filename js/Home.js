@@ -41,6 +41,12 @@ export default class Home extends Component {
     this.updateUser()
     this.updateAuctions()
     this.updateLocations()
+
+    setInterval(() => {
+      this.updateUser()
+      this.updateAuctions()
+      this.updateLocations()
+    }, 30*1000)
   }
 
   updateUser() {
@@ -116,7 +122,9 @@ export default class Home extends Component {
           auctions={auctions}
           points={points}
           location={location}
-          selectAuction={(id) => navigate('Auction', { auction: auctions[id], points: points, onBid: () => { this.updateAuctions(); this.updateUser(); }}) } />
+          selectAuction={(id) => navigate('Auction', { auction: auctions[id], points: points, onBid: () => { 
+            this.updateAuctions(); this.updateUser(); 
+          }}) } />
 
         <TouchableHighlight 
           underlayColor='transparent'

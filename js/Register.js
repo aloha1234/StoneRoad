@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 
 const Screen = Dimensions.get('window')
+import Icon from 'react-native-vector-icons/Ionicons'
 
 import { register } from './API'
 
@@ -28,13 +29,23 @@ export default class CheckEmail extends Component {
   }
 
   render() {
-    const { navigate, state } = this.props.navigation
+    const { navigate, state, goBack } = this.props.navigation
     const { email } = state.params
     return (
+
       <View style={{flex: 1, backgroundColor: '#f0ede6', alignItems: 'center', justifyContent: 'space-between', overflow: 'visible'}}>
-        <View style={{height: Screen.width, marginTop: 20}}>
+        
+        <TouchableHighlight
+          style={{alignSelf: 'flex-start', height: 44, width: 44, margin: 12, marginTop: 32}}
+          underlayColor={'transparent'}
+          overlayColor='transparent'
+          onPress={() => { goBack() }}>
+            <Icon size={24} style={{color: '#333', fontWeight: '800'}} name="ios-arrow-back" />
+        </TouchableHighlight>
+
+        <View pointerEvents='none' style={{height: Screen.width,}}>
           <Image
-            style={{ height: Screen.width, width: Screen.width}}
+            style={{marginTop: -76, height: Screen.width, width: Screen.width}}
             source={require('../img/logo.png')}
             resizeMode='contain'
           />
@@ -77,6 +88,9 @@ export default class CheckEmail extends Component {
             ref='2'
             onSubmitEditing={(event) => {
               const { password1, password2 } = this.state
+              
+                if (this.state.sentPressed)
+                  return
               if (password1 == password2) {
 
                 register(email, password1, password2, (err, res) => {
@@ -91,6 +105,7 @@ export default class CheckEmail extends Component {
                       password: this.state.password1 
                     })
                   }
+                this.setState({sentPressed: false})
                 }) 
               } else {
                 Alert.alert("Error", "Passwords do not match.")
@@ -104,8 +119,11 @@ export default class CheckEmail extends Component {
         
           <TouchableHighlight underlayColor='transparent' overlayColor='transparent' onPress={() => { 
               const { password1, password2 } = this.state
-              if (!this.state.sentPressed && password1 == password2) {
 
+                if (this.state.sentPressed)
+                  return
+              if ( password1 == password2) {
+                this.setState({sentPressed: true})
                 register(email, password1, password2, (err, res) => {
              
                   if (err) {
@@ -118,6 +136,7 @@ export default class CheckEmail extends Component {
                       password: this.state.password1 
                     })
                   }
+                this.setState({sentPressed: false})
                 }) 
               } else {
                 Alert.alert("Error", "Passwords do not match.")

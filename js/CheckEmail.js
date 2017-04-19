@@ -20,12 +20,12 @@ export default class CheckEmail extends Component {
 
   static navigationOptions = {
     headerVisible: false,
-    cardStack: { gesturesEnabled: false, requestPending: false }
+    cardStack: { gesturesEnabled: false }
   }
 
   constructor(props) {
     super(props)
-    this.state = { text: null }
+    this.state = { text: null, requestPending: false }
   }
 
   render() {
@@ -78,6 +78,7 @@ export default class CheckEmail extends Component {
             overlayColor='transparent'
             underlayColor='transparent'
             onPress={() => {
+              
               if (this.state.requestPending)
                 return
 
@@ -86,14 +87,15 @@ export default class CheckEmail extends Component {
                 return
 
               this.setState({requestPending: true})
+              
               userExists(email, (err, res) => {
-                this.setState({requestPending: false})
                 //exists
                 if (!!res) {
                   navigate('Login', { email: email })
                 } else {
                   navigate('Register', { email: email })
                 }
+                this.setState({requestPending: false})
               })
             }}>
             <View style={{paddingVertical: 24, paddingHorizontal: 16, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>

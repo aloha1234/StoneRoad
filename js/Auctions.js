@@ -26,6 +26,7 @@ export default class Auctions extends Component {
 
   render() {
     const { auctions, points, selectAuction, location } = this.props
+
     if(!auctions)
         return <View style={{flex: 1}}></View>
     const filteredAuctions = auctions.filter((item) => { return location == 'All' || item.location == location })
@@ -41,11 +42,16 @@ export default class Auctions extends Component {
             keyExtractor={(item) => String(item.id) }
             renderItem={({item, index}) => {
               const { reward_name, title, location, reward_description, image_url, current_bid, minimum_bid, auction_end_date, auction_start_date, id, is_leader } = item
-              
-              const bid = (current_bid || minimum_bid) + 10;
-              const buttonColor = is_leader ? '#4CD964' : points >= bid ? '#007aff' : '#ff3b30'
-              
+
+              const bidRequired = current_bid ? current_bid + 5 : minimum_bid
+              const canBid = this.props.points >= bidRequired;
               const endDate = new moment(auction_end_date)
+
+              const buttonColor = is_leader
+                ? '#4CD964'
+                : canBid
+                ? '#047cc4'
+                : '#ff3b30'            
 
               const points = current_bid ? current_bid : minimum_bid
 

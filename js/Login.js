@@ -29,7 +29,7 @@ export default class CheckEmail extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { text: null }
+    this.state = { text: null, requestPending: false }
   }
 
   render() {
@@ -65,21 +65,24 @@ export default class CheckEmail extends Component {
             returnKeyType='next'
             onSubmitEditing={(event) => {
               const password = event.nativeEvent.text
-              if (!password || password.length == 0)
+              if (!password || password.length == 0 || this.state.requestPending)
                 return
-              else
-              authenticate(email, password, (errs, res) => {
-                if (errs && errs.length > 0) {
-                  for (const e in errs) {
-                    Alert.alert('Error', errs[e], )
+              else {
+                this.setState({requestPending: true})
+                authenticate(email, password, (errs, res) => {
+                  if (errs && errs.length > 0) {
+                    for (const e in errs) {
+                      Alert.alert('Error', errs[e], )
+                    }
                   }
-                }
-                else if (errs) {
-                  Alert.alert('Login Failed', "Could not connect")  
-                } else {
-                  navigate('Auctions')
-                }
-              })
+                  else if (errs) {
+                    Alert.alert('Login Failed', "Could not connect")  
+                  } else {
+                    navigate('Auctions')
+                  }
+                  this.setState({requestPending: false})
+                })
+              }
             }}
           />
             </KeyboardAvoidingView>
@@ -91,9 +94,11 @@ export default class CheckEmail extends Component {
             underlayColor="transparent" 
             onPress={() => {
               const { password } = this.state
-              if (!password || password.length == 0)
+              if (!password || password.length == 0 || this.state.requestPending)
                 return
-              else
+              else {
+                this.setState({requestPending: true})
+
               authenticate(email, password, (errs, res) => {
                 if (errs && typeof errs != "string" && errs.length > 0) {
                   Alert.alert('Error', errs[0], )
@@ -103,7 +108,9 @@ export default class CheckEmail extends Component {
                 } else {
                   navigate('Auctions')
                 }
+                this.setState({requestPending: false})
               })
+            }
             }}>
             <View style={{paddingVertical: 24, paddingHorizontal: 16, marginTop: StyleSheet.hairlineWidth*-1, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
               <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEXT  ></Text>
