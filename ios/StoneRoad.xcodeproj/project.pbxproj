@@ -1147,7 +1147,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.stoneroad.StoneRoadRewardsApp;
+				PRODUCT_BUNDLE_IDENTIFIER = StoneRoadRewardsApp;
 				PRODUCT_NAME = StoneRoad;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1171,7 +1171,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.stoneroad.StoneRoadRewardsApp;
+				PRODUCT_BUNDLE_IDENTIFIER = StoneRoadRewardsApp;
 				PRODUCT_NAME = StoneRoad;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
