@@ -10,7 +10,8 @@ import {
   Modal,
   StatusBar,
   Dimensions,
-  Alert
+  Alert,
+  ScrollView
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -73,24 +74,26 @@ export default class Auctions extends Component {
             <Icon size={24} style={{color: '#333', fontWeight: '800'}} name="ios-arrow-back" />
             </TouchableHighlight>
           </View>
-          {
-                        image_url ?
-                        <Image
+          
+        </View>
+        <ScrollView>
+        {
+          image_url ?
+          <Image
             style={{ backgroundColor: '#333', width: screen.width-32, height: screen.width-32, borderRadius: 8}}
             source={{uri: image_url}}
           />
-                        :
-                        <View style={{backgroundColor: '#333', width: screen.width-32, height: screen.width-32, borderRadius: 4}}>
-                        </View>
-                    }
-        </View>
-        
+          :
+          <View style={{backgroundColor: '#333', width: screen.width-32, height: screen.width-32, borderRadius: 4}}>
+          </View>
+        }
         <View>
           <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 36, fontWeight: '500', color: '#555'}}>{reward_name}</Text>
           <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>{reward_description}</Text>
           <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, fontSize: 20, fontWeight: '400', color: buttonColor}}>CURRENT BID: {current_bid + (this.state.bid ? 5 : 0)} POINTS</Text>
-          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: '#555'}}>{endDate.to().substring(endDate.to().length-4, endDate.to()).toUpperCase() + ' REMAINING'}</Text>
+          <Text style={{fontFamily: 'American Typewriter', paddingVertical: 4, paddingBottom: 16, fontSize: 16, fontWeight: '400', color: '#555'}}>{endDate.to().substring(endDate.to().length-4, endDate.to()).toUpperCase() + ' REMAINING'}</Text>
         </View>
+        </ScrollView>
         <TouchableHighlight 
           overlayColor='rgba(0,0,0,0.25)'
           overlayColor='rgba(0,0,0,0.25)'
@@ -109,7 +112,6 @@ export default class Auctions extends Component {
             <Text style={{padding: 16, textAlign: 'center',  fontFamily: 'American Typewriter', fontSize: 24}}>{buttonText}</Text>
           </View>
         </TouchableHighlight>
-
       </View>
     );
   }
