@@ -35,13 +35,13 @@ export default class Settings extends Component {
                 onPress={() => onSelect(name)}
                 >
              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, backgroundColor: bgColor, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: '#AAA'}}>
-               <Text style={{fontSize: 20, fontWeight: '500'}}>{name}</Text>
+               <Text style={{fontFamily: 'American Typewriter', fontSize: 20, fontWeight: '500'}}>{name}</Text>
              </View>
              </TouchableHighlight>
             )
           }}
         />
-        <TouchableHighlight underlayColor='transparent' onPress={() => Linking.openURL('mailto:somethingemail@gmail.com?subject=abcdefg&body=body')}>
+        <TouchableHighlight underlayColor='transparent' onPress={() => Linking.openURL('mailto:support@stoneroad.org')}>
         <Text style={{fontFamily: 'American Typewriter', fontSize: 14, color: '#555', textAlign: 'center', padding: 16}}>support@stoneroad.org</Text>
         </TouchableHighlight>
       </View>

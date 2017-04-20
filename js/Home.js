@@ -46,7 +46,7 @@ export default class Home extends Component {
       this.updateUser()
       this.updateAuctions()
       this.updateLocations()
-    }, 30*1000)
+    }, 15*1000)
   }
 
   updateUser() {
@@ -81,8 +81,8 @@ export default class Home extends Component {
     const { auctions, points, packs, loading, locations, location } = this.state
     if (loading) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{fontFamily: "American Typewriter", fontSize: 24, color: '#555', textAlign: 'center'}}>Loading</Text>
+        <View style={{backgroundColor: '#f0ede6', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{fontFamily: "American Typewriter", fontSize: 24, color: '#555', textAlign: 'center'}}>LOADING...</Text>
         </View>
       )
     }
@@ -90,7 +90,7 @@ export default class Home extends Component {
     return (
            
          
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#f0ede6'}}>
        <DrawerLayout
         ref={(rightDrawer) => { return this.rightDrawer = rightDrawer  }}
         drawerWidth={Screen.width-48}
