@@ -51,7 +51,7 @@ export default class CheckEmail extends Component {
           />
         </View>
       {
-        <View style={{alignSelf: 'stretch'}}>
+        <View style={{alignSelf: 'stretch', marginBottom: 64}}>
         <KeyboardAvoidingView
           keyboardVerticalOffset={Screen.width+64+55+32}
           behavior='position'
