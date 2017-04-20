@@ -40,6 +40,7 @@ export default class Auctions extends Component {
           <FlatList 
             data={filteredAuctions}
             keyExtractor={(item) => String(item.id) }
+            ListFooterComponent={() => <View style={{height: 82}} />}
             renderItem={({item, index}) => {
               const { reward_name, title, location, reward_description, image_url, current_bid, minimum_bid, auction_end_date, auction_start_date, id, is_leader } = item
 
@@ -59,10 +60,16 @@ export default class Auctions extends Component {
                 <TouchableHighlight overlayColor="transparent" underlayColor="transparent" onPress={() => this.props.selectAuction(index)}>
                   <View>
                     <View style={{paddingVertical: 16, flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, borderBottomWidth: StyleSheet.hairlineWidth, borderColor: '#AAA'}}>
-                      <Image
-                        style={{backgroundColor: '#333', width: 96, height: 96, borderRadius: 4}}
-                        source={{uri: image_url}}
-                      />
+                      {
+                        image_url ?
+                        <Image
+                          style={{backgroundColor: '#333', width: 96, height: 96, borderRadius: 4}}
+                          source={{uri: image_url}}
+                        /> 
+                        :
+                        <View style={{backgroundColor: '#333', width: 96, height: 96, borderRadius: 4}}>
+                        </View>
+                    }
                       <View style={{flex: 1, marginLeft: 16}}>
                         <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 24, fontWeight: '500', color: '#555'}}>{reward_name}</Text>
                         <Text style={{fontFamily: 'American Typewriter', paddingVertical: 2, fontSize: 16, fontWeight: '400', color: '#111'}}>{reward_description}</Text>

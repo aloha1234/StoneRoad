@@ -131,9 +131,9 @@ export default class Home extends Component {
           onPress={() => { 
             this.setState({ modalVisible: !this.state.modalVisible })
           }}>
-          <View style={{position: 'absolute', bottom: 16, alignSelf: 'center', backgroundColor: '#FFF', padding:12,  borderRadius: 999, borderWidth: 2, borderColor: '#AAA', alignItems: 'center', justifyContent: 'center', shadowRadius: 16, shadowColor: '#AAA', shadowOffset: {width: 0, height: 0}, shadowOpacity: 0.75}}>
+          <View style={{position: 'absolute', bottom: 8, alignSelf: 'center', backgroundColor: '#FFF', padding:12,  borderRadius: 999, borderWidth: 2, borderColor: '#AAA', alignItems: 'center', justifyContent: 'center', shadowRadius: 16, shadowColor: '#AAA', shadowOffset: {width: 0, height: 0}, shadowOpacity: 0.75}}>
             <Image
-              style={{width: 75, height: 75, borderRadius: 0}}
+              style={{width: 36, height: 36, borderRadius: 0}}
               source={require('../img/qr.png')}
             />
           </View>

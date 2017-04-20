@@ -73,10 +73,16 @@ export default class Auctions extends Component {
             <Icon size={24} style={{color: '#333', fontWeight: '800'}} name="ios-arrow-back" />
             </TouchableHighlight>
           </View>
-          <Image
-            style={{ backgroundColor: '#333', width: screen.width-32, height: screen.width-32, borderRadius: 4}}
+          {
+                        image_url ?
+                        <Image
+            style={{ backgroundColor: '#333', width: screen.width-32, height: screen.width-32, borderRadius: 8}}
             source={{uri: image_url}}
           />
+                        :
+                        <View style={{backgroundColor: '#333', width: screen.width-32, height: screen.width-32, borderRadius: 4}}>
+                        </View>
+                    }
         </View>
         
         <View>

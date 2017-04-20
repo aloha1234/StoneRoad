@@ -87,7 +87,7 @@ export default class CheckEmail extends Component {
                 return
 
               this.setState({requestPending: true})
-              
+
               userExists(email, (err, res) => {
                 //exists
                 if (!!res) {
