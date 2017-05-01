@@ -1,53 +1,33 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import React, { Component } from "react";
+import { AppRegistry } from "react-native";
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import CheckKey from "./js/CheckKey";
+import Home from "./js/Home";
+import Auction from "./js/Auction";
+import CheckEmail from "./js/CheckEmail";
+import Login from "./js/Login";
+import Register from "./js/Register";
+import Birthday from "./js/Birthday";
+import Disclaimer from "./js/Disclaimer";
+import Information from "./js/Information";
 
-export default class StoneRoad extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
-  }
-}
+import { StackNavigator } from "react-navigation";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
-
-AppRegistry.registerComponent('StoneRoad', () => StoneRoad);
+AppRegistry.registerComponent("StoneRoad", () =>
+  StackNavigator(
+    {
+      Home: { screen: CheckKey },
+      CheckEmail: { screen: CheckEmail },
+      Login: { screen: Login },
+      Register: { screen: Register },
+      Auctions: { screen: Home },
+      Auction: { screen: Auction },
+      Disclaimer: { screen: Disclaimer },
+      Information: { screen: Information }
+    },
+    {
+      headerMode: "none"
+      // gesturesEnabled: false
+    }
+  )
+);
