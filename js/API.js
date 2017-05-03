@@ -31,10 +31,17 @@ function bid(item, bid, cb) {
 	);
 }
 
+let i = 0;
+let fetchingAuctions = false;
+
 function auctions(cb) {
+	if (fetchingAuctions === true) return;
+
+	fetchingAuctions = true;
 	auctionArray = [];
 
 	getAllAuctions(1, (err, allActions) => {
+		fetchingAuctions = false;
 		cb(err, allActions);
 	});
 }
@@ -43,6 +50,8 @@ function getAllAuctions(page, cb) {
 	call("bidding_rewards/?page=" + page, "GET", null, (err, res) => {
 		if (err) {
 		} else {
+			// alert(page);
+			// alert(auctionArray.length);
 			auctionArray.push(...res.results);
 			if (res.next != null) {
 				getAllAuctions(page + 1, cb);
@@ -138,6 +147,7 @@ function call(endpoint, method, body, cb) {
 		.then(res => {
 			const { status, _bodyText } = res;
 			const body = JSON.parse(_bodyText);
+			// alert(_bodyText);
 			if (status < 200 || status > 299) {
 				cb(
 					body.detail ||

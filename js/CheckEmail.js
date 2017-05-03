@@ -38,55 +38,57 @@ export default class CheckEmail extends Component {
           overflow: "visible"
         }}
       >
-        <View style={{ height: 0, marginTop: 20 }}>
-          <Image
-            style={{ height: Screen.width, width: Screen.width }}
-            source={require("../img/logo.png")}
-            resizeMode="contain"
-          />
-        </View>
-
         <KeyboardAvoidingView
           behavior="position"
           style={{
-            marginTop: Screen.width,
+            // marginTop: Screen.width,
             marginHorizontal: 16,
-            alignSelf: "stretch"
+            alignSelf: "stretch",
+            alignItems: "center"
           }}
         >
-          <TextInput
-            style={{
-              fontFamily: "Tox Typewriter",
-              height: 55,
-              fontSize: 24,
-              fontWeight: "600",
-              textAlign: "center"
-            }}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={text => this.setState({ text })}
-            placeholder="Enter your email address"
-            placeholderTextColor="#AAA"
-            value={this.state.text}
-            returnKeyType="done"
-            enablesReturnKeyAutomatically={true}
-            onSubmitEditing={event => {
-              this.setState({ requestPending: true });
-              const email = event.nativeEvent.text;
-              if (!email || email.length < 1) return;
+          <View style={{ height: Screen.width, marginTop: 20 }}>
+            <Image
+              style={{ height: Screen.width, width: Screen.width }}
+              source={require("../img/logo.png")}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={{ paddingBottom: 22 }}>
+            <TextInput
+              style={{
+                fontFamily: "American Typewriter",
+                height: 48,
+                fontSize: 24,
+                fontWeight: "600",
+                textAlign: "center"
+              }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+              onChangeText={text => this.setState({ text })}
+              placeholder="Enter your email address"
+              placeholderTextColor="#AAA"
+              value={this.state.text}
+              returnKeyType="done"
+              enablesReturnKeyAutomatically={true}
+              onSubmitEditing={event => {
+                this.setState({ requestPending: true });
+                const email = event.nativeEvent.text;
+                if (!email || email.length < 1) return;
 
-              userExists(email, (err, res) => {
-                //exists
-                if (!!res) {
-                  navigate("Login", { email: email });
-                } else {
-                  navigate("Register", { email: email });
-                }
-                this.setState({ requestPending: false });
-              });
-            }}
-          />
+                userExists(email, (err, res) => {
+                  //exists
+                  if (!!res) {
+                    navigate("Login", { email: email });
+                  } else {
+                    navigate("Register", { email: email });
+                  }
+                  this.setState({ requestPending: false });
+                });
+              }}
+            />
+          </View>
         </KeyboardAvoidingView>
 
         <View
@@ -129,7 +131,7 @@ export default class CheckEmail extends Component {
             >
               <Text
                 style={{
-                  fontFamily: "Tox Typewriter",
+                  fontFamily: "American Typewriter",
                   letterSpacing: 4,
                   fontSize: 20,
                   fontWeight: "400",
@@ -147,7 +149,7 @@ export default class CheckEmail extends Component {
           //   underlayColor='transparent'
           //   onPress={() => { if (this.state.text) navigate('Login', { email: this.state.text }) }}>
           //   <View style={{paddingVertical: 24, paddingHorizontal: 16, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
-          //     <Text style={{fontFamily: 'Tox Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>LOG  IN  ></Text>
+          //     <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>LOG  IN  ></Text>
           //   </View>
           // </TouchableHighlight>
           // <TouchableHighlight
@@ -155,7 +157,7 @@ export default class CheckEmail extends Component {
           //   underlayColor='transparent'
           //   onPress={() => { if (this.state.text) navigate('Register', { email: this.state.text }) }}>
           //   <View style={{paddingVertical: 24, paddingHorizontal: 16, marginTop: StyleSheet.hairlineWidth*-1, borderColor: '#111', borderWidth: StyleSheet.hairlineWidth}}>
-          //     <Text style={{fontFamily: 'Tox Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEW  ACCOUNT  ></Text>
+          //     <Text style={{fontFamily: 'American Typewriter', letterSpacing: 4, fontSize: 20, fontWeight: '400', color: '#111'}}>NEW  ACCOUNT  ></Text>
           //   </View>
           // </TouchableHighlight>
         }

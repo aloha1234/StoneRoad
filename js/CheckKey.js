@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Image, Dimensions } from "react-native";
+import { StyleSheet, View, Image, Dimensions, StatusBar } from "react-native";
 
 import Home from "./Home";
 import CheckEmail from "./CheckEmail";
@@ -26,6 +26,8 @@ export default class CheckKey extends Component {
   constructor(props) {
     super(props);
     this.state = { checkingKey: true, loggedIn: null };
+    StatusBar.setBarStyle("dark-content");
+    StatusBar.setBackgroundColor("#f0ede6");
   }
 
   componentWillMount() {

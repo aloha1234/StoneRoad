@@ -9,7 +9,8 @@ import {
   Dimensions,
   Modal,
   StatusBar,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 
 import Auctions from "./Auctions";
@@ -28,9 +29,7 @@ const Screen = Dimensions.get("window");
 export default class Home extends Component {
   static navigationOptions = {
     headerVisible: false,
-    cardStack: {
-      gesturesEnabled: false
-    }
+    gesturesEnabled: false
   };
 
   constructor(props) {
@@ -39,16 +38,31 @@ export default class Home extends Component {
       points: 0,
       modalVisible: false,
       loading: true,
-      location: "All"
+      location: "All",
+      navigating: false
     };
     this.updateUser();
     this.updateAuctions();
     this.updateLocations();
 
-    setInterval(() => {
+    StatusBar.setBarStyle("dark-content");
+    StatusBar.setBackgroundColor("#f0ede6");
+
+    this.refresh = setInterval(() => {
       this.updateUser();
       this.updateAuctions();
     }, 15 * 1000);
+  }
+
+  lockNavigation() {
+    this.setState({ navigating: true });
+    setTimeout(() => {
+      this.setState({ navigating: false });
+    }, 2000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.refresh);
   }
 
   updateUser() {
@@ -107,7 +121,7 @@ export default class Home extends Component {
         >
           <Text
             style={{
-              fontFamily: "Tox Typewriter",
+              fontFamily: "American Typewriter",
               fontSize: 24,
               color: "#555",
               textAlign: "center"
@@ -147,7 +161,7 @@ export default class Home extends Component {
           <View
             style={{
               backgroundColor: "#f0ede6",
-              paddingTop: 20,
+              paddingTop: Platform.OS === "ios" ? 20 : 0,
               borderBottomWidth: 1,
               borderColor: "#CCC",
               alignItems: "stretch"
@@ -202,15 +216,21 @@ export default class Home extends Component {
             auctions={auctions}
             points={points}
             location={location}
-            selectAuction={id =>
+            selectAuction={id => {
+              const filteredAuctions = auctions.filter(item => {
+                return location == "All" || item.location == location;
+              });
+              if (this.state.navigating) return;
+              this.lockNavigation();
               navigate("Auction", {
-                auction: auctions[id],
+                auction: filteredAuctions[id],
                 points: points,
                 onBid: () => {
                   this.updateAuctions();
                   this.updateUser();
                 }
-              })}
+              });
+            }}
           />
 
           <TouchableHighlight
@@ -218,12 +238,14 @@ export default class Home extends Component {
             onPress={() => {
               this.setState({ modalVisible: !this.state.modalVisible });
             }}
+            style={{
+              position: "absolute",
+              bottom: 8,
+              alignSelf: "center"
+            }}
           >
             <View
               style={{
-                position: "absolute",
-                bottom: 8,
-                alignSelf: "center",
                 backgroundColor: "#FFF",
                 padding: 12,
                 borderRadius: 999,
@@ -238,7 +260,7 @@ export default class Home extends Component {
               }}
             >
               <Image
-                style={{ width: 36, height: 36, borderRadius: 0 }}
+                style={{ width: 44, height: 44, borderRadius: 0 }}
                 source={require("../img/qr.png")}
               />
             </View>
@@ -265,7 +287,15 @@ export default class Home extends Component {
                 >
 
                   <TouchableHighlight
-                    style={{ zIndex: 999 }}
+                    style={{
+                      zIndex: 999,
+                      width: 22,
+                      // height: 10,
+                      top: 8
+                      // backgroundColor: "red"
+                    }}
+                    underlayColor="transparent"
+                    overlayColor="transparent"
                     onPress={() => {
                       StatusBar.setBarStyle("dark-content");
                       this.updateUser();
@@ -273,7 +303,11 @@ export default class Home extends Component {
                       this.setState({ modalVisible: !this.state.modalVisible });
                     }}
                   >
-                    <Text style={{ color: "#FFF", fontSize: 36 }}>×</Text>
+                    <Text
+                      style={{ color: "#FFF", fontSize: 36, lineHeight: 36 }}
+                    >
+                      ×
+                    </Text>
                   </TouchableHighlight>
                 </QR>
 

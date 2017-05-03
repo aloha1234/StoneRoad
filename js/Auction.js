@@ -11,7 +11,8 @@ import {
   StatusBar,
   Dimensions,
   Alert,
-  ScrollView
+  ScrollView,
+  Platform
 } from "react-native";
 
 import Icon from "react-native-vector-icons/Ionicons";
@@ -27,7 +28,7 @@ import { bid } from "./API";
 export default class Auctions extends Component {
   static navigationOptions = {
     headerVisible: false,
-    gesturesEnabled: true,
+    gesturesEnabled: Platform.OS == "ios" ? true : false,
     cardStack: { gesturesEnabled: true }
   };
 
@@ -69,25 +70,26 @@ export default class Auctions extends Component {
 
     return (
       <View style={styles.container}>
+        {Platform.OS === "ios"
+          ? <View>
+              <View style={{ height: 44, justifyContent: "center" }}>
+                <TouchableHighlight
+                  underlayColor={"transparent"}
+                  over
+                  onPress={() => {
+                    goBack();
+                  }}
+                >
+                  <Icon
+                    size={24}
+                    style={{ color: "#333", fontWeight: "800" }}
+                    name="ios-arrow-back"
+                  />
+                </TouchableHighlight>
+              </View>
 
-        <View>
-          <View style={{ height: 44, justifyContent: "center" }}>
-            <TouchableHighlight
-              underlayColor={"transparent"}
-              over
-              onPress={() => {
-                goBack();
-              }}
-            >
-              <Icon
-                size={24}
-                style={{ color: "#333", fontWeight: "800" }}
-                name="ios-arrow-back"
-              />
-            </TouchableHighlight>
-          </View>
-
-        </View>
+            </View>
+          : null}
         <ScrollView>
           {image_url
             ? <Image
@@ -110,7 +112,7 @@ export default class Auctions extends Component {
           <View>
             <Text
               style={{
-                fontFamily: "Tox Typewriter",
+                fontFamily: "American Typewriter",
                 paddingVertical: 4,
                 fontSize: 36,
                 fontWeight: "500",
@@ -121,7 +123,7 @@ export default class Auctions extends Component {
             </Text>
             <Text
               style={{
-                fontFamily: "Tox Typewriter",
+                fontFamily: "American Typewriter",
                 paddingVertical: 4,
                 fontSize: 20,
                 fontWeight: "400",
@@ -132,7 +134,7 @@ export default class Auctions extends Component {
             </Text>
             <Text
               style={{
-                fontFamily: "Tox Typewriter",
+                fontFamily: "American Typewriter",
                 paddingVertical: 4,
                 fontSize: 20,
                 fontWeight: "400",
@@ -143,9 +145,9 @@ export default class Auctions extends Component {
             </Text>
             <Text
               style={{
-                fontFamily: "Tox Typewriter",
+                fontFamily: "American Typewriter",
                 paddingVertical: 4,
-                // paddingBottom: 16,
+                paddingBottom: 16,
                 fontSize: 16,
                 fontWeight: "400",
                 color: "#555"
@@ -181,7 +183,7 @@ export default class Auctions extends Component {
               style={{
                 padding: 16,
                 textAlign: "center",
-                fontFamily: "Tox Typewriter",
+                fontFamily: "American Typewriter",
                 fontSize: 24
               }}
             >

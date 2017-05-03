@@ -8,10 +8,13 @@ import {
   TouchableHighlight,
   Button,
   Modal,
-  StatusBar
+  StatusBar,
+  Platform
 } from "react-native";
 
 const moment = require("moment");
+
+const fontFamily = Platform.OS === "ios" ? "American Typewriter" : "normal";
 
 import QR from "./QR";
 
@@ -44,7 +47,7 @@ export default class Auctions extends Component {
             style={{
               fontSize: 20,
               textAlign: "center",
-              fontFamily: "Tox Typewriter"
+              fontFamily: fontFamily
             }}
           >
             {points >= 0 ? `YOU HAVE ${points} POINTS.` : ""}
@@ -54,7 +57,7 @@ export default class Auctions extends Component {
           ? <FlatList
               data={filteredAuctions}
               keyExtractor={item => String(item.id)}
-              ListFooterComponent={() => <View style={{ height: 82 }} />}
+              ListFooterComponent={() => <View style={{ height: 88 }} />}
               renderItem={({ item, index }) => {
                 const {
                   reward_name,
@@ -86,27 +89,42 @@ export default class Auctions extends Component {
                     underlayColor="transparent"
                     onPress={() => this.props.selectAuction(index)}
                   >
-                    <View>
+                    <View
+                      style={{
+                        padding: 16,
+                        borderBottomWidth: StyleSheet.hairlineWidth,
+                        borderColor: "#AAA"
+                      }}
+                    >
                       <View
                         style={{
-                          paddingVertical: 16,
+                          // paddingVertical: 16,
                           flexDirection: "row",
-                          alignItems: "center",
-                          marginHorizontal: 16,
-                          borderBottomWidth: StyleSheet.hairlineWidth,
-                          borderColor: "#AAA"
+                          alignItems: "center"
+                          // marginHorizontal: 16
+                          // borderBottomWidth: StyleSheet.hairlineWidth,
+                          // borderColor: "#AAA"
                         }}
                       >
                         {image_url
-                          ? <Image
+                          ? <View
                               style={{
                                 backgroundColor: "#333",
                                 width: 96,
                                 height: 96,
-                                borderRadius: 4
+                                borderRadius: 4,
+                                overflow: "hidden"
                               }}
-                              source={{ uri: image_url }}
-                            />
+                            >
+                              <Image
+                                style={{
+                                  borderRadius: 4,
+                                  width: 96,
+                                  height: 96
+                                }}
+                                source={{ uri: image_url }}
+                              />
+                            </View>
                           : <View
                               style={{
                                 backgroundColor: "#333",
@@ -118,7 +136,7 @@ export default class Auctions extends Component {
                         <View style={{ flex: 1, marginLeft: 16 }}>
                           <Text
                             style={{
-                              fontFamily: "Tox Typewriter",
+                              fontFamily: fontFamily,
                               paddingVertical: 2,
                               fontSize: 24,
                               fontWeight: "500",
@@ -127,45 +145,48 @@ export default class Auctions extends Component {
                           >
                             {reward_name}
                           </Text>
-                          <Text
-                            style={{
-                              fontFamily: "Tox Typewriter",
-                              paddingVertical: 2,
-                              fontSize: 16,
-                              fontWeight: "400",
-                              color: "#111"
-                            }}
-                          >
-                            {reward_description}
-                          </Text>
-                          <Text
-                            style={{
-                              fontFamily: "Tox Typewriter",
-                              paddingVertical: 2,
-                              fontSize: 16,
-                              fontWeight: "400",
-                              color: buttonColor
-                            }}
-                          >
-                            {is_leader
-                              ? "LEADING"
-                              : "CURRENT BID: " + points + " POINTS"}
-                          </Text>
-                          <Text
-                            style={{
-                              fontFamily: "Tox Typewriter",
-                              paddingVertical: 2,
-                              fontSize: 16,
-                              fontWeight: "400",
-                              color: "#555"
-                            }}
-                          >
-                            {endDate
-                              .to()
-                              .substring(endDate.to().length - 4, endDate.to())
-                              .toUpperCase() + " REMAINING"}
-                          </Text>
+
                         </View>
+                      </View>
+                      <View style={{ paddingTop: 8 }}>
+                        <Text
+                          style={{
+                            fontFamily: fontFamily,
+                            paddingVertical: 2,
+                            fontSize: 16,
+                            fontWeight: "400",
+                            color: "#111"
+                          }}
+                        >
+                          {reward_description}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: fontFamily,
+                            paddingVertical: 2,
+                            fontSize: 16,
+                            fontWeight: "400",
+                            color: buttonColor
+                          }}
+                        >
+                          {is_leader
+                            ? "LEADING"
+                            : "CURRENT BID: " + points + " POINTS"}
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: fontFamily,
+                            paddingTop: 2,
+                            fontSize: 16,
+                            fontWeight: "400",
+                            color: "#555"
+                          }}
+                        >
+                          {endDate
+                            .to()
+                            .substring(endDate.to().length - 4, endDate.to())
+                            .toUpperCase() + " REMAINING"}
+                        </Text>
                       </View>
                     </View>
                   </TouchableHighlight>
@@ -174,7 +195,7 @@ export default class Auctions extends Component {
             />
           : <Text
               style={{
-                fontFamily: "Tox Typewriter",
+                fontFamily: fontFamily,
                 textAlign: "center",
                 padding: 32,
                 fontSize: 24

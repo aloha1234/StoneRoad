@@ -54,7 +54,7 @@ export default class Settings extends Component {
                 >
                   <Text
                     style={{
-                      fontFamily: "Tox Typewriter",
+                      fontFamily: "American Typewriter",
                       fontSize: 20,
                       fontWeight: "500"
                     }}
@@ -72,7 +72,7 @@ export default class Settings extends Component {
         >
           <Text
             style={{
-              fontFamily: "Tox Typewriter",
+              fontFamily: "American Typewriter",
               fontSize: 14,
               color: "#555",
               textAlign: "center",
@@ -95,13 +95,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0ede6"
   },
   locationLabel: {
-    fontFamily: "Tox Typewriter",
+    fontFamily: "American Typewriter",
     textAlign: "center",
     paddingTop: 32,
     fontSize: 36
   },
   location: {
-    fontFamily: "Tox Typewriter",
+    fontFamily: "American Typewriter",
     textAlign: "center",
     padding: 32,
     fontSize: 20,

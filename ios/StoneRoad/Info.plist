@@ -41,7 +41,7 @@
 	<string></string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>typewriter.ttf</string>
+		<string>typist.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>
 		<string>FontAwesome.ttf</string>

@@ -8,7 +8,8 @@ import {
   KeyboardAvoidingView,
   TouchableHighlight,
   Dimensions,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 
 const Screen = Dimensions.get("window");
@@ -19,9 +20,6 @@ import { authenticate } from "./API";
 export default class CheckEmail extends Component {
   static navigationOptions = {
     headerVisible: false,
-    cardStack: {
-      gesturesEnabled: false
-    },
     gesturesEnabled: false
   };
 
@@ -35,7 +33,6 @@ export default class CheckEmail extends Component {
     const { email } = state.params;
     return (
       <View
-        pointerEvents="box-none"
         style={{
           flex: 1,
           backgroundColor: "#f0ede6",
@@ -44,89 +41,92 @@ export default class CheckEmail extends Component {
           overflow: "visible"
         }}
       >
-        <TouchableHighlight
+        <KeyboardAvoidingView
+          behavior="position"
           style={{
-            alignSelf: "flex-start",
-            height: 44,
-            width: 44,
-            margin: 12,
-            marginTop: 32
-          }}
-          underlayColor={"transparent"}
-          overlayColor="transparent"
-          onPress={() => {
-            goBack();
+            // marginTop: Screen.width,
+            marginHorizontal: 16,
+            alignSelf: "stretch",
+            alignItems: "center"
           }}
         >
-          <Icon
-            size={24}
-            style={{ color: "#333", fontWeight: "800" }}
-            name="ios-arrow-back"
-          />
-        </TouchableHighlight>
-        <View style={{ height: 0, marginTop: 20 }}>
-          <Image
+          <TouchableHighlight
             style={{
-              marginTop: -32,
-              height: Screen.width,
-              width: Screen.width
+              alignSelf: "flex-start",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 44,
+              width: 44,
+              marginTop: Platform.OS === "ios" ? 20 : 0
             }}
-            source={require("../img/logo.png")}
-            resizeMode="cover"
-          />
-        </View>
-        {
-          <KeyboardAvoidingView
-            behavior="position"
-            style={{
-              marginTop: Screen.width,
-              marginHorizontal: 16,
-              borderBottomColor: "#111",
-              borderBottomWidth: StyleSheet.hairlineWidth,
-              alignSelf: "stretch"
+            underlayColor={"transparent"}
+            overlayColor="transparent"
+            onPress={() => {
+              goBack();
             }}
           >
-            <TextInput
-              style={{
-                height: 55,
-                fontSize: 24,
-                fontWeight: "600",
-                textAlign: "center",
-                fontFamily: "Tox Typewriter"
-              }}
-              secureTextEntry={true}
-              autoCorrect={false}
-              onChangeText={text => this.setState({ password: text })}
-              placeholder="Password"
-              placeholderTextColor="#AAA"
-              returnKeyType="next"
-              onSubmitEditing={event => {
-                const password = event.nativeEvent.text;
-                if (
-                  !password ||
-                  password.length == 0 ||
-                  this.state.requestPending
-                )
-                  return;
-                else {
-                  this.setState({ requestPending: true });
-                  authenticate(email, password, (errs, res) => {
-                    if (errs && errs.length > 0) {
-                      for (const e in errs) {
-                        Alert.alert("Error", errs[e]);
-                      }
-                    } else if (errs) {
-                      Alert.alert("Login Failed", "Could not connect");
-                    } else {
-                      navigate("Auctions");
-                    }
-                    this.setState({ requestPending: false });
-                  });
-                }
-              }}
+            <Icon
+              size={24}
+              style={{ color: "#333", fontWeight: "800" }}
+              name="ios-arrow-back"
             />
-          </KeyboardAvoidingView>
-        }
+          </TouchableHighlight>
+
+          <View
+            pointerEvents="none"
+            style={{ height: Screen.width, marginTop: -44 }}
+          >
+            <Image
+              style={{ height: Screen.width, width: Screen.width }}
+              source={require("../img/logo.png")}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={{ paddingBottom: 22 }}>
+            {
+              <TextInput
+                style={{
+                  height: 55,
+                  fontSize: 24,
+                  fontWeight: "600",
+                  textAlign: "center",
+                  fontFamily: "American Typewriter"
+                }}
+                secureTextEntry={true}
+                autoCorrect={false}
+                onChangeText={text => this.setState({ password: text })}
+                placeholder="Password"
+                placeholderTextColor="#AAA"
+                returnKeyType="next"
+                onSubmitEditing={event => {
+                  const password = event.nativeEvent.text;
+                  if (
+                    !password ||
+                    password.length == 0 ||
+                    this.state.requestPending
+                  )
+                    return;
+                  else {
+                    this.setState({ requestPending: true });
+                    authenticate(email, password, (errs, res) => {
+                      if (errs && errs.length > 0) {
+                        for (const e in errs) {
+                          Alert.alert("Error", errs[e]);
+                        }
+                      } else if (errs) {
+                        Alert.alert("Login Failed", "Could not connect");
+                      } else {
+                        navigate("Auctions");
+                      }
+                      this.setState({ requestPending: false });
+                    });
+                  }
+                }}
+              />
+            }
+          </View>
+        </KeyboardAvoidingView>
+
         <View
           style={{
             marginBottom: 16,
@@ -166,14 +166,14 @@ export default class CheckEmail extends Component {
               style={{
                 paddingVertical: 24,
                 paddingHorizontal: 16,
-                marginTop: StyleSheet.hairlineWidth * -1,
+                marginTop: StyleSheet.hairlineWidth,
                 borderColor: "#111",
                 borderWidth: StyleSheet.hairlineWidth
               }}
             >
               <Text
                 style={{
-                  fontFamily: "Tox Typewriter",
+                  fontFamily: "American Typewriter",
                   letterSpacing: 4,
                   fontSize: 20,
                   fontWeight: "400",
