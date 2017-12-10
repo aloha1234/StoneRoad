@@ -27,7 +27,6 @@ export default class CheckKey extends Component {
     super(props);
     this.state = { checkingKey: true, loggedIn: null };
     StatusBar.setBarStyle("dark-content");
-    StatusBar.setBackgroundColor("#f0ede6");
   }
 
   componentWillMount() {

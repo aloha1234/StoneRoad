@@ -71,7 +71,7 @@ export default class Auctions extends Component {
     return (
       <View style={styles.container}>
         {Platform.OS === "ios"
-          ? <View>
+          ? <View style={{paddingHorizontal: 16}}>
               <View style={{ height: 44, justifyContent: "center" }}>
                 <TouchableHighlight
                   underlayColor={"transparent"}
@@ -90,7 +90,7 @@ export default class Auctions extends Component {
 
             </View>
           : null}
-        <ScrollView>
+        <ScrollView style={{paddingHorizontal: 16}}>
           {image_url
             ? <Image
                 style={{
@@ -199,7 +199,7 @@ export default class Auctions extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingTop: 16,
     backgroundColor: "#f0ede6",
     justifyContent: "space-between"
   }

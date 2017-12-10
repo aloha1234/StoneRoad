@@ -16,13 +16,14 @@ import {
 import Auctions from "./Auctions";
 import Profile from "./Profile";
 import Settings from "./Settings";
+import Stores from "./Stores";
 import QR from "./QR";
 
 import Icon from "react-native-vector-icons/Ionicons";
 
 import DrawerLayout from "react-native-drawer-layout";
 
-import { user, auctions, locations } from "./API";
+import { user, auctions, locations, stores } from "./API";
 
 const Screen = Dimensions.get("window");
 
@@ -39,14 +40,16 @@ export default class Home extends Component {
       modalVisible: false,
       loading: true,
       location: "All",
-      navigating: false
+      navigating: false,
+      stores: [],
+      locations: []
     };
     this.updateUser();
     this.updateAuctions();
     this.updateLocations();
+    this.updateStores();
 
     StatusBar.setBarStyle("dark-content");
-    StatusBar.setBackgroundColor("#f0ede6");
 
     this.refresh = setInterval(() => {
       this.updateUser();
@@ -88,6 +91,16 @@ export default class Home extends Component {
     });
   }
 
+  updateStores() {
+    stores((err, stores) => {
+      if (!err && stores.results) {
+        this.setState({ stores: stores.results });
+      } else {
+        console.error(err)
+      }
+    });
+  }
+
   updateAuctions() {
     console.log("??", this.state.auctions);
 
@@ -107,7 +120,8 @@ export default class Home extends Component {
       packs,
       loading,
       locations,
-      location
+      location,
+      stores
     } = this.state;
     if (loading) {
       return (
@@ -157,163 +171,180 @@ export default class Home extends Component {
             />
           )}
         >
-
-          <View
-            style={{
-              backgroundColor: "#f0ede6",
-              paddingTop: Platform.OS === "ios" ? 20 : 0,
-              borderBottomWidth: 1,
-              borderColor: "#CCC",
-              alignItems: "stretch"
+          <DrawerLayout
+            ref={leftDrawer => {
+              return (this.leftDrawer = leftDrawer);
             }}
+            drawerWidth={Screen.width}
+            drawerPosition={DrawerLayout.positions.Left}
+            renderNavigationView={() => (
+              <Stores
+                location={location}
+                stores={stores}
+                onClose={() => this.leftDrawer.closeDrawer()}
+              />
+            )}
           >
             <View
               style={{
-                height: 64,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center"
+                backgroundColor: "#f0ede6",
+                paddingTop: Platform.OS === "ios" ? 20 : 0,
+                borderBottomWidth: 1,
+                borderColor: "#CCC",
+                alignItems: "stretch"
               }}
             >
-              <TouchableHighlight>
-                <Icon
-                  style={{
-                    height: 32,
-                    width: 32,
-                    fontSize: 32,
-                    marginLeft: 12,
-                    color: "transparent"
-                  }}
-                  name="ios-settings"
-                />
-              </TouchableHighlight>
-              <Image
-                style={{ width: 128 }}
-                source={require("../img/logo-small.png")}
-                resizeMode="contain"
-              />
-              <TouchableHighlight
-                overlayColor="transparent"
-                underlayColor="transparent"
-                onPress={() => this.rightDrawer.openDrawer()}
+              <View
+                style={{
+                  height: 64,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
               >
-                <Icon
-                  style={{
-                    height: 32,
-                    width: 32,
-                    fontSize: 32,
-                    textAlign: "right",
-                    marginRight: 12,
-                    color: "#333"
-                  }}
-                  name="ios-settings"
+                <TouchableHighlight
+                  onPress={() => this.rightDrawer.openDrawer()}
+                >
+                  <Icon
+                    style={{
+                      height: 32,
+                      width: 32,
+                      fontSize: 32,
+                      marginLeft: 12,
+                      color: "#333"
+                    }}
+                    name="ios-map"
+                    onPress={() => this.leftDrawer.openDrawer()}
+                  />
+                </TouchableHighlight>
+                <Image
+                  style={{ width: 128 }}
+                  source={require("../img/logo-small.png")}
+                  resizeMode="contain"
                 />
-              </TouchableHighlight>
+                <TouchableHighlight
+                  overlayColor="transparent"
+                  underlayColor="transparent"
+                  onPress={() => this.rightDrawer.openDrawer()}
+                >
+                  <Icon
+                    style={{
+                      height: 32,
+                      width: 32,
+                      fontSize: 32,
+                      textAlign: "right",
+                      marginRight: 12,
+                      color: "#333"
+                    }}
+                    name="ios-settings"
+                  />
+                </TouchableHighlight>
+              </View>
             </View>
-          </View>
 
-          <Auctions
-            auctions={auctions}
-            points={points}
-            location={location}
-            selectAuction={id => {
-              const filteredAuctions = auctions.filter(item => {
-                return location == "All" || item.location == location;
-              });
-              if (this.state.navigating) return;
-              this.lockNavigation();
-              navigate("Auction", {
-                auction: filteredAuctions[id],
-                points: points,
-                onBid: () => {
-                  this.updateAuctions();
-                  this.updateUser();
-                }
-              });
-            }}
-          />
+            <Auctions
+              auctions={auctions}
+              points={points}
+              location={location}
+              selectAuction={id => {
+                const filteredAuctions = auctions.filter(item => {
+                  return location == "All" || item.location == location;
+                });
+                if (this.state.navigating) return;
+                this.lockNavigation();
+                navigate("Auction", {
+                  auction: filteredAuctions[id],
+                  points: points,
+                  onBid: () => {
+                    this.updateAuctions();
+                    this.updateUser();
+                  }
+                });
+              }}
+            />
 
-          <TouchableHighlight
-            underlayColor="transparent"
-            onPress={() => {
-              this.setState({ modalVisible: !this.state.modalVisible });
-            }}
-            style={{
-              position: "absolute",
-              bottom: 8,
-              alignSelf: "center"
-            }}
-          >
-            <View
+            <TouchableHighlight
+              underlayColor="transparent"
+              onPress={() => {
+                this.setState({ modalVisible: !this.state.modalVisible });
+              }}
               style={{
-                backgroundColor: "#FFF",
-                padding: 12,
-                borderRadius: 999,
-                borderWidth: 2,
-                borderColor: "#AAA",
-                alignItems: "center",
-                justifyContent: "center",
-                shadowRadius: 16,
-                shadowColor: "#AAA",
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.75
+                position: "absolute",
+                bottom: 8,
+                alignSelf: "center"
               }}
             >
-              <Image
-                style={{ width: 44, height: 44, borderRadius: 0 }}
-                source={require("../img/qr.png")}
-              />
-            </View>
-          </TouchableHighlight>
+              <View
+                style={{
+                  backgroundColor: "#FFF",
+                  padding: 12,
+                  borderRadius: 999,
+                  borderWidth: 2,
+                  borderColor: "#AAA",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  shadowRadius: 16,
+                  shadowColor: "#AAA",
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0.75
+                }}
+              >
+                <Image
+                  style={{ width: 44, height: 44, borderRadius: 0 }}
+                  source={require("../img/qr.png")}
+                />
+              </View>
+            </TouchableHighlight>
 
-          <Modal
-            animationType={"slide"}
-            transparent={false}
-            visible={this.state.modalVisible}
-            onShow={() => {
-              StatusBar.setBarStyle("light-content");
-            }}
-            onRequestClose={() => console.log("Request close")}
-          >
-            <View style={{ flex: 1 }}>
+            <Modal
+              animationType={"slide"}
+              transparent={false}
+              visible={this.state.modalVisible}
+              onShow={() => {
+                StatusBar.setBarStyle("light-content");
+              }}
+              onRequestClose={() => console.log("Request close")}
+            >
               <View style={{ flex: 1 }}>
-                <QR
-                  close={() => {
-                    StatusBar.setBarStyle("dark-content");
-                    this.updateUser();
-                    this.updateAuctions();
-                    this.setState({ modalVisible: !this.state.modalVisible });
-                  }}
-                >
-
-                  <TouchableHighlight
-                    style={{
-                      zIndex: 999,
-                      width: 22,
-                      // height: 10,
-                      top: 8
-                      // backgroundColor: "red"
-                    }}
-                    underlayColor="transparent"
-                    overlayColor="transparent"
-                    onPress={() => {
+                <View style={{ flex: 1 }}>
+                  <QR
+                    close={() => {
                       StatusBar.setBarStyle("dark-content");
                       this.updateUser();
                       this.updateAuctions();
                       this.setState({ modalVisible: !this.state.modalVisible });
                     }}
                   >
-                    <Text
-                      style={{ color: "#FFF", fontSize: 36, lineHeight: 36 }}
+                    <TouchableHighlight
+                      style={{
+                        zIndex: 999,
+                        width: 22,
+                        // height: 10,
+                        top: 8
+                        // backgroundColor: "red"
+                      }}
+                      underlayColor="transparent"
+                      overlayColor="transparent"
+                      onPress={() => {
+                        StatusBar.setBarStyle("dark-content");
+                        this.updateUser();
+                        this.updateAuctions();
+                        this.setState({
+                          modalVisible: !this.state.modalVisible
+                        });
+                      }}
                     >
-                      ×
-                    </Text>
-                  </TouchableHighlight>
-                </QR>
-
+                      <Text
+                        style={{ color: "#FFF", fontSize: 36, lineHeight: 36 }}
+                      >
+                        ×
+                      </Text>
+                    </TouchableHighlight>
+                  </QR>
+                </View>
               </View>
-            </View>
-          </Modal>
+            </Modal>
+          </DrawerLayout>
         </DrawerLayout>
       </View>
     );

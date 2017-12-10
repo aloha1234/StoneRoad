@@ -1,6 +1,8 @@
 import { Alert, AsyncStorage } from "react-native";
 
-const API_ROOT = "https://stoneroadrewards.com/api/v1";
+// const API_ROOT = "https://stoneroadrewards.com/api/v1";
+const API_ROOT = "http://127.0.0.1:8000/api/v1";
+
 
 let key;
 loadKey();
@@ -20,6 +22,10 @@ async function loadKey() {
 
 function locations(cb) {
 	call("locations/", "GET", null, cb);
+}
+
+function stores(cb) {
+	call("stores/", "GET", null, cb);
 }
 
 function bid(item, bid, cb) {
@@ -175,5 +181,6 @@ export {
 	register,
 	auctions,
 	bid,
-	locations
+	locations,
+	stores
 };
