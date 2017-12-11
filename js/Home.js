@@ -18,6 +18,7 @@ import Auctions from "./Auctions";
 import Profile from "./Profile";
 import Settings from "./Settings";
 import Stores from "./Stores";
+import Products from "./Products";
 import QR from "./QR";
 
 import Icon from "react-native-vector-icons/Ionicons";
@@ -163,15 +164,11 @@ export default class Home extends Component {
           ref={rightDrawer => {
             return (this.rightDrawer = rightDrawer);
           }}
-          drawerWidth={Screen.width - 48}
+          drawerWidth={Screen.width}
           drawerPosition={DrawerLayout.positions.Right}
           renderNavigationView={() => (
-            <Settings
-              onSelect={location => {
-                this.setState({ location: location });
-              }}
-              locations={locations}
-              location={location}
+            <Products
+              onClose={() => this.rightDrawer.closeDrawer()}
             />
           )}
         >
