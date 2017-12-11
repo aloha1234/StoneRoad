@@ -35,24 +35,6 @@ export default class Auctions extends Component {
     });
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            marginHorizontal: 16,
-            paddingVertical: 16,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderColor: "#AAA"
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              textAlign: "center",
-              fontFamily: fontFamily
-            }}
-          >
-            {points >= 0 ? `YOU HAVE ${points} POINTS.` : ""}
-          </Text>
-        </View>
         {filteredAuctions.length
           ? <FlatList
               data={filteredAuctions}

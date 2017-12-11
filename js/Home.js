@@ -10,7 +10,8 @@ import {
   Modal,
   StatusBar,
   Alert,
-  Platform
+  Platform,
+  Picker
 } from "react-native";
 
 import Auctions from "./Auctions";
@@ -26,6 +27,8 @@ import DrawerLayout from "react-native-drawer-layout";
 import { user, auctions, locations, stores } from "./API";
 
 const Screen = Dimensions.get("window");
+
+const fontFamily = Platform.OS === "ios" ? "American Typewriter" : "normal";
 
 export default class Home extends Component {
   static navigationOptions = {
@@ -96,7 +99,7 @@ export default class Home extends Component {
       if (!err && stores.results) {
         this.setState({ stores: stores.results });
       } else {
-        console.error(err)
+        console.error(err);
       }
     });
   }
@@ -123,6 +126,7 @@ export default class Home extends Component {
       location,
       stores
     } = this.state;
+
     if (loading) {
       return (
         <View
@@ -236,10 +240,51 @@ export default class Home extends Component {
                       marginRight: 12,
                       color: "#333"
                     }}
-                    name="ios-settings"
+                    name="ios-leaf"
                   />
                 </TouchableHighlight>
               </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginHorizontal: 16,
+                paddingVertical: 16,
+                borderBottomWidth: StyleSheet.hairlineWidth,
+                borderColor: "#AAA"
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontFamily: fontFamily
+                }}
+              >
+                {points >= 0 ? `YOU HAVE ${points} POINTS.` : ""}
+              </Text>
+              <TouchableHighlight
+                underlayColor="transparent"
+                onPress={() =>
+                  this.setState({ showPicker: !this.state.showPicker })}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontFamily: fontFamily
+                    }}
+                  >
+                    {location === "All" ? "All CA" : location}
+                  </Text>
+                  <Icon
+                    style={{ fontSize: 16, marginLeft: 4 }}
+                    name={this.state.showPicker ? "ios-arrow-up" : "ios-arrow-down"}
+                  />
+                </View>
+              </TouchableHighlight>
             </View>
 
             <Auctions
@@ -262,6 +307,32 @@ export default class Home extends Component {
                 });
               }}
             />
+            {this.state.showPicker ? (
+              <Picker
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  zIndex: 999,
+                  backgroundColor: "#f9f7f5",
+                  borderTopWidth: 1,
+                  borderColor: "#ccc"
+                }}
+                selectedValue={this.state.location}
+                onValueChange={location =>
+                  this.setState({ location: location })}
+              >
+                <Picker.Item label="All" value="All" />
+                {locations.map(location => (
+                  <Picker.Item
+                    key={location.name}
+                    label={location.name}
+                    value={location.name}
+                  />
+                ))}
+              </Picker>
+            ) : null}
 
             <TouchableHighlight
               underlayColor="transparent"
