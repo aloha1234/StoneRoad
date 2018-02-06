@@ -176,6 +176,7 @@ export default class Home extends Component {
             ref={leftDrawer => {
               return (this.leftDrawer = leftDrawer);
             }}
+            drawerLockMode="locked-open"
             drawerWidth={Screen.width}
             drawerPosition={DrawerLayout.positions.Left}
             renderNavigationView={() => (
