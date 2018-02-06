@@ -1,7 +1,6 @@
 import { Alert, AsyncStorage } from "react-native";
 
-// const API_ROOT = "https://stoneroadrewards.com/api/v1";
-const API_ROOT = "http://127.0.0.1:8000/api/v1";
+const API_ROOT = "https://stoneroadrewards.com/api/v1";
 
 
 let key;
