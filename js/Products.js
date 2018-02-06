@@ -70,10 +70,10 @@ export default class Settings extends Component {
               </View>
             </View>
           </View>
-          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.7625}} resizeMode="contain" source={require("../img/products/1.jpg")} />
-          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.5170898438}} resizeMode="contain" source={require("../img/products/2.jpg")} />
-          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.5170898438}} resizeMode="contain" source={require("../img/products/3.jpg")} />
-          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.5170898438}} resizeMode="contain" source={require("../img/products/4.jpg")} />
+          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.7625}} resizeMode="contain" source={require("../img/products/image1.png")} />
+          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.5170898438}} resizeMode="contain" source={require("../img/products/image2.png")} />
+          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.5170898438}} resizeMode="contain" source={require("../img/products/image3.png")} />
+          <Image style={{marginVertical: 8, width: width - 32, height: (width-32)*0.5170898438}} resizeMode="contain" source={require("../img/products/image4.png")} />
         </ScrollView>
       </View>
     );
@@ -83,7 +83,7 @@ export default class Settings extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
+    paddingVertical: 20,
     // alignItems: 'center',
     backgroundColor: "#f0ede6"
   },
